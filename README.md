@@ -1,5 +1,5 @@
 # 💫 About Me:
-🔭 Working on: RAG-based apps, chatbots, and LLM-powered tools<br>🌱 Learning: LangChain, LSTMs, and applied NLP<br>💬 Ask me about: RAG pipelines, chatbots, or getting started in AI/ML<br>📫 Reach me: priyanshuuux@gmail.com<br>
+🔭 Working on: RAG-based apps, chatbots, and LLM-powered tools<br>🌱 Learning: LangChain, RAG, and applied AI Agents<br>💬 Ask me about: RAG pipelines, chatbots, or getting started in AI/ML<br>📫 Reach me: priyanshuuux@gmail.com<br>
 
 
 ## 🌐 Socials:
