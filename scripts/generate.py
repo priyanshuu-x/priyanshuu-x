@@ -31,8 +31,8 @@ SKILLS = {
     "ops/": ["docker", "security"],
 }
 PROJECTS = [
-    ("PaperPilot", "RAG over GenAI papers: cited answers, honest \"not found\", evaluated with DeepEval.", "rag · langgraph · fastapi · langsmith"),
-    ("TicketPilot", "4-agent LangGraph support system, MCP tools, human-approved refunds, 19/19 adversarial evals.", "agents · mcp · langgraph · evals"),
+    ("PaperPilot", "RAG over 20 arXiv papers: cited answers, 0.89 groundedness (DeepEval), refuses off-topic.", "rag · langgraph · fastapi · langsmith"),
+    ("TicketPilot", "4-agent LangGraph support system with MCP tools: 19/19 correct, 0 wrong refunds in evals.", "agents · mcp · langgraph · evals"),
     ("PayPal-hackathon", "ProofCheck: verifies refund & dispute evidence against PayPal's real records.", "agents · mcp · fastapi · security"),
 ]
 
@@ -160,7 +160,7 @@ def stats_svg(s, days):
     y = 94
     for i, (k, v) in enumerate(rows):
         b.append(f'<g class="fade" style="animation-delay:{0.15+i*0.07:.2f}s"><text x="40" y="{y}" class="d">{esc(k)}</text>'
-                 f'<text x="230" y="{y}" class="c bold">{esc(v)}</text></g>')
+                 f'<text x="230" y="{y}" class="a bold">{esc(v)}</text></g>')
         y += 22
     # languages (right column)
     lx = 420
@@ -206,11 +206,13 @@ def projects_svg():
     W = 860
     b = [prompt(66, "ls -l ~/projects")]
     y = 98
+    accents = [CYAN, MAGENTA, GREEN]
     for i, (name, desc, tags) in enumerate(PROJECTS):
+        col = accents[i % len(accents)]
         b.append(f'<g class="fade" style="animation-delay:{0.2+i*0.25:.2f}s">'
-                 f'<text x="40" y="{y}"><tspan class="d">drwxr-xr-x  </tspan><tspan class="c bold">{esc(name)}/</tspan></text>'
+                 f'<text x="40" y="{y}"><tspan class="d">drwxr-xr-x  </tspan><tspan fill="{col}" class="bold">{esc(name)}/</tspan></text>'
                  f'<text x="64" y="{y+20}">{esc(desc)}</text>'
-                 f'<text x="64" y="{y+40}" class="m" style="font-size:12px">[{esc(tags)}]</text></g>')
+                 f'<text x="64" y="{y+40}" style="font-size:12px;fill:{col};fill-opacity:0.8">[{esc(tags)}]</text></g>')
         y += 74
     H = y + 18
     b.append(f'<text x="24" y="{H-16}"><tspan class="g bold">priyanshu@github</tspan><tspan class="d">:</tspan><tspan class="b">~</tspan><tspan class="d">$ </tspan><tspan class="cur g">█</tspan></text>')
@@ -218,7 +220,9 @@ def projects_svg():
 
 ABOUT = [
     ("working_on", "multi-agent RAG systems, MCP tool servers, and their evals & guardrails", CYAN),
-    ("learning", "LangChain, RAG, LangGraph, applied AI agents", GREEN),
+    ("exploring", "agent evals, MCP security, production observability", GREEN),
+    ("status", "open to AI engineer roles & internships", MAGENTA),
+    ("education", "B.Tech CSE, Bennett University (exp. May 2027)", BLUE),
     ("contact", "priyanshuuux@gmail.com", AMBER),
 ]
 
@@ -294,6 +298,8 @@ def main():
     (OUT / "social_email.svg").write_text(pill_svg("email", AMBER), encoding="utf-8")
     (OUT / "terminal_skills.svg").write_text(skills_svg(), encoding="utf-8")
     (OUT / "terminal_projects.svg").write_text(projects_svg(), encoding="utf-8")
+    for (name, _, _), col in zip(PROJECTS, [CYAN, MAGENTA, GREEN]):
+        (OUT / f"link_{name.lower()}.svg").write_text(pill_svg(name, col), encoding="utf-8")
     print("ok", {k: v for k, v in s.items() if k != "langs"}, s["langs"].most_common(5), len(days))
 
 
