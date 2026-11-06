@@ -18,8 +18,8 @@ text{font-family:'JetBrains Mono','Fira Code','Cascadia Code',Consolas,'DejaVu S
 <g class="fade" style="animation-delay:0.22s"><text x="40" y="116" class="d">followers</text><text x="230" y="116" class="c bold">4</text></g>
 <g class="fade" style="animation-delay:0.29s"><text x="40" y="138" class="d">stars</text><text x="230" y="138" class="c bold">0</text></g>
 <g class="fade" style="animation-delay:0.36s"><text x="40" y="160" class="d">pull requests</text><text x="230" y="160" class="c bold">12</text></g>
-<g class="fade" style="animation-delay:0.43s"><text x="40" y="182" class="d">commits</text><text x="230" y="182" class="c bold">83</text></g>
-<g class="fade" style="animation-delay:0.50s"><text x="40" y="204" class="d">contributions / 12mo</text><text x="230" y="204" class="c bold">141</text></g>
+<g class="fade" style="animation-delay:0.43s"><text x="40" y="182" class="d">commits</text><text x="230" y="182" class="c bold">84</text></g>
+<g class="fade" style="animation-delay:0.50s"><text x="40" y="204" class="d">contributions / 12mo</text><text x="230" y="204" class="c bold">142</text></g>
 <g class="fade" style="animation-delay:0.57s"><text x="40" y="226" class="d">current streak</text><text x="230" y="226" class="c bold">4 days</text></g>
 <g class="fade" style="animation-delay:0.64s"><text x="40" y="248" class="d">longest streak</text><text x="230" y="248" class="c bold">5 days</text></g>
 <text x="420" y="94" class="m bold"># top languages</text>
@@ -408,7 +408,7 @@ text{font-family:'JetBrains Mono','Fira Code','Cascadia Code',Consolas,'DejaVu S
 <rect class="fade" style="animation-delay:1.62s" x="820" y="370" width="12" height="12" rx="2.5" fill="#0e4429"><title>1 on 2026-11-03</title></rect>
 <rect class="fade" style="animation-delay:1.62s" x="820" y="385" width="12" height="12" rx="2.5" fill="#39d353"><title>22 on 2026-11-04</title></rect>
 <rect class="fade" style="animation-delay:1.62s" x="820" y="400" width="12" height="12" rx="2.5" fill="#0e4429"><title>1 on 2026-11-05</title></rect>
-<rect class="fade" style="animation-delay:1.62s" x="820" y="415" width="12" height="12" rx="2.5" fill="#006d32"><title>2 on 2026-11-06</title></rect>
+<rect class="fade" style="animation-delay:1.62s" x="820" y="415" width="12" height="12" rx="2.5" fill="#006d32"><title>3 on 2026-11-06</title></rect>
 <text x="690" y="471" class="d" style="font-size:11px">less</text>
 <rect x="722" y="461" width="12" height="12" rx="2.5" fill="#161b22"/>
 <rect x="737" y="461" width="12" height="12" rx="2.5" fill="#0e4429"/>
