@@ -245,10 +245,50 @@ def pill_svg(label, color):
             f'<text x="28" y="21">open {esc(label)}</text></svg>\n')
 
 
+BANNER = [
+    "██████╗ ██████╗ ██╗██╗   ██╗ █████╗ ███╗   ██╗███████╗██╗  ██╗██╗   ██╗",
+    "██╔══██╗██╔══██╗██║╚██╗ ██╔╝██╔══██╗████╗  ██║██╔════╝██║  ██║██║   ██║",
+    "██████╔╝██████╔╝██║ ╚████╔╝ ███████║██╔██╗ ██║███████╗███████║██║   ██║",
+    "██╔═══╝ ██╔══██╗██║  ╚██╔╝  ██╔══██║██║╚██╗██║╚════██║██╔══██║██║   ██║",
+    "██║     ██║  ██║██║   ██║   ██║  ██║██║ ╚████║███████║██║  ██║╚██████╔╝",
+    "╚═╝     ╚═╝  ╚═╝╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ",
+]
+TAGLINE = "AI Engineer · Generative AI / LLM Applications"
+TAGS = "multi-agent RAG · MCP · evals · guardrails"
+
+
+def banner_svg():
+    W = 860
+    cw, ch = 9.0, 17.0
+    tl = len(BANNER[0]) * cw
+    x0 = (W - tl) / 2
+    b = [prompt(66, "figlet priyanshu", 0.0)]
+    y0 = 88
+    for i, line in enumerate(BANNER):
+        cells = []
+        for j, c in enumerate(line):
+            x, y = x0 + j * cw, y0 + i * ch
+            if c == "█":
+                cells.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{cw+0.3}" height="{ch+0.3}" fill="url(#bg)"/>')
+            elif c != " ":
+                cells.append(f'<rect x="{x+1.5:.1f}" y="{y+1.5:.1f}" width="{cw-3}" height="{ch-3}" fill="{CYAN}" fill-opacity="0.22"/>')
+        b.append(f'<g class="fade" style="animation-delay:{0.2+i*0.12:.2f}s">{"".join(cells)}</g>')
+    y = y0 + len(BANNER) * ch + 34
+    b.append(f'<text class="fade bold" style="animation-delay:1.1s" x="{W/2}" y="{y}" text-anchor="middle">{esc(TAGLINE)}</text>')
+    b.append(f'<text class="fade d" style="animation-delay:1.3s" x="{W/2}" y="{y+22}" text-anchor="middle">{esc(TAGS)}</text>')
+    H = y + 62
+    b.append(f'<text x="24" y="{H-16}"><tspan class="g bold">priyanshu@github</tspan><tspan class="d">:</tspan><tspan class="b">~</tspan><tspan class="d">$ </tspan><tspan class="cur g">█</tspan></text>')
+    svg = window(f"{USER}@github: ~", W, H, "\n".join(b))
+    defs = (f'<defs><linearGradient id="bg" gradientUnits="userSpaceOnUse" x1="{x0:.1f}" x2="{x0+tl:.1f}" y1="0" y2="0"><stop offset="0" stop-color="{GREEN}"/>'
+            f'<stop offset="0.5" stop-color="{CYAN}"/><stop offset="1" stop-color="{MAGENTA}"/></linearGradient></defs>')
+    return svg.replace("</style>", "</style>\n" + defs, 1)
+
+
 def main():
     OUT.mkdir(exist_ok=True)
     s, days = fetch_stats(), fetch_calendar()
     (OUT / "terminal_stats.svg").write_text(stats_svg(s, days), encoding="utf-8")
+    (OUT / "terminal_banner.svg").write_text(banner_svg(), encoding="utf-8")
     (OUT / "terminal_about.svg").write_text(about_svg(), encoding="utf-8")
     (OUT / "social_linkedin.svg").write_text(pill_svg("linkedin", BLUE), encoding="utf-8")
     (OUT / "social_email.svg").write_text(pill_svg("email", AMBER), encoding="utf-8")
