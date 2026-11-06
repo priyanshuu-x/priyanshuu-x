@@ -176,30 +176,8 @@ def stats_svg(s, days):
                  f'<rect x="{lx+130}" y="{yy}" width="250" height="14" rx="3" fill="#161b22"/>'
                  f'<rect class="grow" style="animation-delay:{0.3+i*0.12:.2f}s" x="{lx+130}" y="{yy}" width="{bw:.0f}" height="14" rx="3" fill="{colors[i]}"/>'
                  f'<text x="{lx+392}" y="{yy+11}" class="d">{pct:.0f}%</text>')
-    # heatmap
-    base = 94 + 22 * len(rows) + 14
-    b.append(prompt(base + 16, "git log --graph --contributions", 0.8))
-    gx, gy, cell, gap = 40, base + 56, 12, 3
-    first = days[0][0]
-    pad = (first.weekday() + 1) % 7  # Sunday-first rows
-    last_month = None
-    for i, (d, lvl, c) in enumerate(days):
-        idx = i + pad
-        col, row = idx // 7, idx % 7
-        x, yy = gx + col * (cell + gap), gy + row * (cell + gap)
-        if d.day <= 7 and row == 0 and d.month != last_month and col < 50:
-            b.append(f'<text x="{x}" y="{gy-8}" class="d" style="font-size:11px">{d.strftime("%b")}</text>')
-            last_month = d.month
-        b.append(f'<rect class="fade" style="animation-delay:{1.0+col*0.012:.2f}s" x="{x}" y="{yy}" width="{cell}" height="{cell}" rx="2.5" fill="{HEAT[lvl]}"><title>{c} on {d}</title></rect>')
-    cols = (len(days) + pad + 6) // 7
-    H = gy + 7 * (cell + gap) + 40
-    lgx = gx + cols * (cell + gap) - 5 * (cell + 3) - 70
-    b.append(f'<text x="{lgx}" y="{H-14}" class="d" style="font-size:11px">less</text>')
-    for i, col_ in enumerate(HEAT):
-        b.append(f'<rect x="{lgx+32+i*(cell+3)}" y="{H-24}" width="{cell}" height="{cell}" rx="2.5" fill="{col_}"/>')
-    b.append(f'<text x="{lgx+36+5*(cell+3)}" y="{H-14}" class="d" style="font-size:11px">more</text>')
-    b.append(f'<text x="24" y="{H-14}"><tspan class="g bold">priyanshu@github</tspan><tspan class="d">:</tspan><tspan class="b">~</tspan><tspan class="d">$ </tspan><tspan class="cur g">█</tspan></text>')
-    W = max(W, gx + cols * (cell + gap) + 30)
+    H = 94 + 22 * len(rows) + 22
+    b.append(f'<text x="24" y="{H-16}"><tspan class="g bold">priyanshu@github</tspan><tspan class="d">:</tspan><tspan class="b">~</tspan><tspan class="d">$ </tspan><tspan class="cur g">█</tspan></text>')
     return window(f"{USER}@github: ~/stats", W, H, "\n".join(b))
 
 
