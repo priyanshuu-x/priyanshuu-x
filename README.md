@@ -1,3 +1,9 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="dark_mode.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="light_mode.svg" />
+  <img alt="priyanshuu-x's GitHub profile" src="dark_mode.svg" />
+</picture>
+
 # 💫 About Me:
 🔭 Working on: RAG-based apps,LLM-powered tools<br>🌱 Learning: LangChain, RAG, LangGraph and applied AI Agents<br> <br>📫 Reach me: priyanshuuux@gmail.com<br>
 
