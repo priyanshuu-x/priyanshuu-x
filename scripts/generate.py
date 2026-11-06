@@ -32,7 +32,7 @@ SKILLS = {
 }
 PROJECTS = [
     ("PaperPilot", "RAG over GenAI papers: cited answers, honest \"not found\", evaluated with DeepEval.", "rag · langgraph · fastapi · langsmith"),
-    ("TicketPilot", "AI agent that triages and routes support tickets.", "agents · python"),
+    ("TicketPilot", "4-agent LangGraph support system, MCP tools, human-approved refunds, 19/19 adversarial evals.", "agents · mcp · langgraph · evals"),
     ("PayPal-hackathon", "ProofCheck: verifies refund & dispute evidence against PayPal's real records.", "agents · mcp · fastapi · security"),
 ]
 
@@ -239,7 +239,7 @@ def projects_svg():
     return window(f"{USER}@github: ~/projects", W, H, "\n".join(b))
 
 ABOUT = [
-    ("working_on", "RAG-based apps, LLM-powered tools", CYAN),
+    ("working_on", "multi-agent RAG systems, MCP tool servers, and their evals & guardrails", CYAN),
     ("learning", "LangChain, RAG, LangGraph, applied AI agents", GREEN),
     ("contact", "priyanshuuux@gmail.com", AMBER),
 ]
