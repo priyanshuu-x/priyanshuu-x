@@ -18,8 +18,8 @@ text{font-family:'JetBrains Mono','Fira Code','Cascadia Code',Consolas,'DejaVu S
 <g class="fade" style="animation-delay:0.22s"><text x="40" y="116" class="d">followers</text><text x="230" y="116" class="a bold">4</text></g>
 <g class="fade" style="animation-delay:0.29s"><text x="40" y="138" class="d">stars</text><text x="230" y="138" class="a bold">0</text></g>
 <g class="fade" style="animation-delay:0.36s"><text x="40" y="160" class="d">pull requests</text><text x="230" y="160" class="a bold">12</text></g>
-<g class="fade" style="animation-delay:0.43s"><text x="40" y="182" class="d">commits</text><text x="230" y="182" class="a bold">92</text></g>
-<g class="fade" style="animation-delay:0.50s"><text x="40" y="204" class="d">contributions / 12mo</text><text x="230" y="204" class="a bold">150</text></g>
+<g class="fade" style="animation-delay:0.43s"><text x="40" y="182" class="d">commits</text><text x="230" y="182" class="a bold">94</text></g>
+<g class="fade" style="animation-delay:0.50s"><text x="40" y="204" class="d">contributions / 12mo</text><text x="230" y="204" class="a bold">151</text></g>
 <g class="fade" style="animation-delay:0.57s"><text x="40" y="226" class="d">current streak</text><text x="230" y="226" class="a bold">4 days</text></g>
 <g class="fade" style="animation-delay:0.64s"><text x="40" y="248" class="d">longest streak</text><text x="230" y="248" class="a bold">5 days</text></g>
 <text x="420" y="94" class="m bold"># top languages</text>
