@@ -5,7 +5,7 @@ text{font-family:'JetBrains Mono','Fira Code','Cascadia Code',Consolas,'DejaVu S
 .cur{animation:blink 1.1s steps(1) infinite} @keyframes blink{50%{opacity:0}}
 .fade{opacity:0;animation:in .5s ease forwards} @keyframes in{to{opacity:1}}
 .grow{transform-box:fill-box;transform-origin:left;transform:scaleX(0);animation:gr .9s ease forwards} @keyframes gr{to{transform:scaleX(1)}}
-.ld{opacity:0;animation:ld 12s linear infinite both}@keyframes ld{0%{opacity:0}3%{opacity:1}90%{opacity:1}94%{opacity:0}100%{opacity:0}}.scan{opacity:0;filter:drop-shadow(0 0 4px #56d4dd);animation:scan 12s linear infinite both}@keyframes scan{0%{transform:translateX(0);opacity:1}9.5%{transform:translateX(636px);opacity:1}10%{transform:translateX(636px);opacity:0}100%{opacity:0}}@media (prefers-reduced-motion:reduce){.ld{animation:none;opacity:1}.scan{display:none}}
+.ld{opacity:0;animation:ld 6s linear infinite both}@keyframes ld{0%{opacity:0}6.0%{opacity:1}88.3%{opacity:1}94.2%{opacity:0}100%{opacity:0}}.scan{opacity:0;filter:drop-shadow(0 0 4px #56d4dd);animation:scan 6s linear infinite both}@keyframes scan{0%{transform:translateX(0);opacity:1}19.0%{transform:translateX(636px);opacity:1}20.0%{transform:translateX(636px);opacity:0}100%{opacity:0}}@media (prefers-reduced-motion:reduce){.ld{animation:none;opacity:1}.scan{display:none}}
 @media (prefers-reduced-motion:reduce){.cur,.fade,.grow{animation:none;opacity:1;transform:none}}
 </style>
 <defs><linearGradient id="bg" gradientUnits="userSpaceOnUse" x1="110.5" x2="749.5" y1="0" y2="0"><stop offset="0" stop-color="#3fb950"/><stop offset="0.5" stop-color="#56d4dd"/><stop offset="1" stop-color="#d2a8ff"/></linearGradient></defs>

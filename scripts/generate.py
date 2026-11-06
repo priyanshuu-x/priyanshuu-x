@@ -270,7 +270,7 @@ def banner_svg():
     y0 = 88
     # Looping "load" effect: the wordmark is split into 8-column chunks that reveal left to right
     # while a scan line sweeps across; the cycle repeats every CYCLE seconds.
-    CYCLE, CHUNK = 12, 8
+    CYCLE, CHUNK = 6, 8
     chunks = {}
     for i, line in enumerate(BANNER):
         for j, c in enumerate(line):
@@ -292,10 +292,11 @@ def banner_svg():
     H = y + 62
     b.append(f'<text x="24" y="{H-16}"><tspan class="g bold">priyanshu@github</tspan><tspan class="d">:</tspan><tspan class="b">~</tspan><tspan class="d">$ </tspan><tspan class="cur g">█</tspan></text>')
     sweep = tl - 3
+    p = lambda sec: f"{sec / CYCLE * 100:.1f}"  # seconds -> keyframe percent
     css = (f".ld{{opacity:0;animation:ld {CYCLE}s linear infinite both}}"
-           f"@keyframes ld{{0%{{opacity:0}}3%{{opacity:1}}90%{{opacity:1}}94%{{opacity:0}}100%{{opacity:0}}}}"
+           f"@keyframes ld{{0%{{opacity:0}}{p(0.36)}%{{opacity:1}}{p(CYCLE-0.7)}%{{opacity:1}}{p(CYCLE-0.35)}%{{opacity:0}}100%{{opacity:0}}}}"
            f".scan{{opacity:0;filter:drop-shadow(0 0 4px {CYAN});animation:scan {CYCLE}s linear infinite both}}"
-           f"@keyframes scan{{0%{{transform:translateX(0);opacity:1}}9.5%{{transform:translateX({sweep:.0f}px);opacity:1}}10%{{transform:translateX({sweep:.0f}px);opacity:0}}100%{{opacity:0}}}}"
+           f"@keyframes scan{{0%{{transform:translateX(0);opacity:1}}{p(1.14)}%{{transform:translateX({sweep:.0f}px);opacity:1}}{p(1.2)}%{{transform:translateX({sweep:.0f}px);opacity:0}}100%{{opacity:0}}}}"
            f"@media (prefers-reduced-motion:reduce){{.ld{{animation:none;opacity:1}}.scan{{display:none}}}}")
     svg = window(f"{USER}@github: ~", W, H, "\n".join(b), css)
     defs = (f'<defs><linearGradient id="bg" gradientUnits="userSpaceOnUse" x1="{x0:.1f}" x2="{x0+tl:.1f}" y1="0" y2="0"><stop offset="0" stop-color="{GREEN}"/>'
