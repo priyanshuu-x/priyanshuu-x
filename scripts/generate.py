@@ -220,7 +220,7 @@ def projects_svg():
 
 ABOUT = [
     ("working_on", "multi-agent RAG systems, MCP tool servers, and their evals & guardrails", CYAN),
-    ("exploring", "agent evals, MCP security, production observability", GREEN),
+    ("exploring", "agent evals, MCP, production, observability", GREEN),
     ("status", "open to AI engineer roles & internships", MAGENTA),
     ("education", "B.Tech CSE, Bennett University (exp. May 2027)", BLUE),
     ("contact", "priyanshuuux@gmail.com", AMBER),
