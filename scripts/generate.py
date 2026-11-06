@@ -1,22 +1,15 @@
 #!/usr/bin/env python3
 """Generate terminal-style SVG panels for the GitHub profile README.
 
-Outputs (in ./assets): terminal_stats.svg, terminal_skills.svg, terminal_projects.svg
-Data: public GitHub REST API + the public contributions calendar. A GITHUB_TOKEN
-(optional) only raises rate limits. Standard library only.
+Outputs (in ./assets): banner, about, skills, projects panels plus link buttons.
+Static content only (no network access). Standard library only.
 """
-import datetime as dt
 import html
-import json
 import os
-import re
-import urllib.request
-from collections import Counter
 from pathlib import Path
 
 USER = os.environ.get("GH_USER", "priyanshuu-x")
 OUT = Path(__file__).resolve().parent.parent / "assets"
-TOKEN = os.environ.get("GITHUB_TOKEN")
 
 # palette (GitHub-dark terminal)
 BG, BORDER, FG, DIM = "#0d1117", "#30363d", "#c9d1d9", "#6e7681"
@@ -37,87 +30,18 @@ PROJECTS = [
 ]
 
 
-def get(url, accept=None):
-    h = {"User-Agent": "profile-readme-generator"}
-    if accept:
-        h["Accept"] = accept
-    if TOKEN and "api.github.com" in url:
-        h["Authorization"] = f"Bearer {TOKEN}"
-    with urllib.request.urlopen(urllib.request.Request(url, headers=h), timeout=30) as r:
-        return r.read().decode()
 
 
-def api(path):
-    return json.loads(get(f"https://api.github.com{path}"))
 
 
 def esc(s):
     return html.escape(str(s), quote=True)
 
 
-def fetch_stats():
-    user = api(f"/users/{USER}")
-    repos, page = [], 1
-    while True:
-        batch = api(f"/users/{USER}/repos?per_page=100&page={page}")
-        repos += batch
-        if len(batch) < 100:
-            break
-        page += 1
-    own = [r for r in repos if not r["fork"]]
-    langs = Counter()
-    for r in own:
-        try:
-            for k, v in api(f"/repos/{USER}/{r['name']}/languages").items():
-                langs[k] += v
-        except Exception:
-            if r.get("language"):
-                langs[r["language"]] += 1
-    prs = commits = None
-    try:
-        prs = api(f"/search/issues?q=author:{USER}+type:pr&per_page=1")["total_count"]
-    except Exception:
-        pass
-    try:
-        commits = api(f"/search/commits?q=author:{USER}&per_page=1")["total_count"]
-    except Exception:
-        pass
-    return {
-        "repos": user["public_repos"],
-        "followers": user["followers"],
-        "stars": sum(r["stargazers_count"] for r in own),
-        "prs": prs,
-        "commits": commits,
-        "langs": langs,
-        "since": user["created_at"][:4],
-    }
 
 
-def fetch_calendar():
-    page = get(f"https://github.com/users/{USER}/contributions")
-    counts = {}
-    for m in re.finditer(r'for="(contribution-day-component-\d+-\d+)"[^>]*>\s*([^<]*)', page):
-        n = re.match(r"(\d+) contribution", m.group(2).strip())
-        counts[m.group(1)] = int(n.group(1)) if n else 0
-    days = []
-    for m in re.finditer(r"<td[^>]*data-date=\"([\d-]+)\"[^>]*id=\"([^\"]+)\"[^>]*data-level=\"(\d)\"", page):
-        days.append((dt.date.fromisoformat(m.group(1)), int(m.group(3)), counts.get(m.group(2), 0)))
-    days.sort()
-    return days
 
 
-def streaks(days):
-    longest = cur = 0
-    for _, _, c in days:
-        cur = cur + 1 if c > 0 else 0
-        longest = max(longest, cur)
-    current = 0
-    for i, (_, _, c) in enumerate(reversed(days)):
-        if c > 0:
-            current += 1
-        elif i > 0:  # today may still be empty; any earlier gap ends the streak
-            break
-    return current, longest
 
 
 def window(title, w, h, body, extra_css=""):
@@ -146,39 +70,6 @@ def prompt(y, cmd, delay=0.0):
             f'<tspan class="d">:</tspan><tspan class="b">~</tspan><tspan class="d">$ </tspan>{esc(cmd)}</text></g>')
 
 
-def stats_svg(s, days):
-    W = 860
-    cur, longest = streaks(days)
-    total = sum(c for _, _, c in days)
-    fmt = lambda v: "n/a" if v is None else f"{v:,}"
-    rows = [
-        ("repos", fmt(s["repos"])), ("followers", fmt(s["followers"])), ("stars", fmt(s["stars"])),
-        ("pull requests", fmt(s["prs"])), ("commits", fmt(s["commits"])),
-        ("contributions / 12mo", fmt(total)), ("current streak", f"{cur} days"), ("longest streak", f"{longest} days"),
-    ]
-    b = [prompt(66, f"gh stats --user {USER}")]
-    y = 94
-    for i, (k, v) in enumerate(rows):
-        b.append(f'<g class="fade" style="animation-delay:{0.15+i*0.07:.2f}s"><text x="40" y="{y}" class="d">{esc(k)}</text>'
-                 f'<text x="230" y="{y}" class="a bold">{esc(v)}</text></g>')
-        y += 22
-    # languages (right column)
-    lx = 420
-    b.append(f'<text x="{lx}" y="94" class="m bold"># top languages</text>')
-    tot = sum(s["langs"].values()) or 1
-    top = [(n, v) for n, v in s["langs"].most_common(5) if v / tot >= 0.01]
-    colors = [GREEN, CYAN, MAGENTA, AMBER, BLUE]
-    for i, (name, v) in enumerate(top):
-        yy = 120 + i * 26
-        pct = v / tot * 100
-        bw = max(4, 250 * pct / 100 / (top[0][1] / tot))  # scale to the biggest
-        b.append(f'<text x="{lx}" y="{yy+11}">{esc(name)}</text>'
-                 f'<rect x="{lx+130}" y="{yy}" width="250" height="14" rx="3" fill="#161b22"/>'
-                 f'<rect class="grow" style="animation-delay:{0.3+i*0.12:.2f}s" x="{lx+130}" y="{yy}" width="{bw:.0f}" height="14" rx="3" fill="{colors[i]}"/>'
-                 f'<text x="{lx+392}" y="{yy+11}" class="d">{pct:.0f}%</text>')
-    H = 94 + 22 * len(rows) + 22
-    b.append(f'<text x="24" y="{H-16}"><tspan class="g bold">priyanshu@github</tspan><tspan class="d">:</tspan><tspan class="b">~</tspan><tspan class="d">$ </tspan><tspan class="cur g">█</tspan></text>')
-    return window(f"{USER}@github: ~/stats", W, H, "\n".join(b))
 
 
 def skills_svg():
@@ -306,8 +197,6 @@ def banner_svg():
 
 def main():
     OUT.mkdir(exist_ok=True)
-    s, days = fetch_stats(), fetch_calendar()
-    (OUT / "terminal_stats.svg").write_text(stats_svg(s, days), encoding="utf-8")
     (OUT / "terminal_banner.svg").write_text(banner_svg(), encoding="utf-8")
     (OUT / "terminal_about.svg").write_text(about_svg(), encoding="utf-8")
     (OUT / "social_linkedin.svg").write_text(pill_svg("linkedin", BLUE), encoding="utf-8")
@@ -316,7 +205,7 @@ def main():
     (OUT / "terminal_projects.svg").write_text(projects_svg(), encoding="utf-8")
     for (name, _, _), col in zip(PROJECTS, [CYAN, MAGENTA, GREEN]):
         (OUT / f"link_{name.lower()}.svg").write_text(pill_svg(name, col), encoding="utf-8")
-    print("ok", {k: v for k, v in s.items() if k != "langs"}, s["langs"].most_common(5), len(days))
+    print("ok")
 
 
 if __name__ == "__main__":
