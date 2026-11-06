@@ -268,21 +268,36 @@ def banner_svg():
     x0 = (W - tl) / 2
     b = [prompt(66, "figlet priyanshu", 0.0)]
     y0 = 88
+    # Looping "load" effect: the wordmark is split into 8-column chunks that reveal left to right
+    # while a scan line sweeps across; the cycle repeats every CYCLE seconds.
+    CYCLE, CHUNK = 12, 8
+    chunks = {}
     for i, line in enumerate(BANNER):
-        cells = []
         for j, c in enumerate(line):
             x, y = x0 + j * cw, y0 + i * ch
             if c == "█":
-                cells.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{cw+0.3}" height="{ch+0.3}" fill="url(#bg)"/>')
+                r = f'<rect x="{x:.1f}" y="{y:.1f}" width="{cw+0.3}" height="{ch+0.3}" fill="url(#bg)"/>'
             elif c != " ":
-                cells.append(f'<rect x="{x+1.5:.1f}" y="{y+1.5:.1f}" width="{cw-3}" height="{ch-3}" fill="{CYAN}" fill-opacity="0.22"/>')
-        b.append(f'<g class="fade" style="animation-delay:{0.2+i*0.12:.2f}s">{"".join(cells)}</g>')
+                r = f'<rect x="{x+1.5:.1f}" y="{y+1.5:.1f}" width="{cw-3}" height="{ch-3}" fill="{CYAN}" fill-opacity="0.22"/>'
+            else:
+                continue
+            chunks.setdefault(j // CHUNK, []).append(r)
+    for k in sorted(chunks):
+        b.append(f'<g class="ld" style="animation-delay:{k*0.12:.2f}s">{"".join(chunks[k])}</g>')
+    bh = len(BANNER) * ch
+    b.append(f'<rect class="scan" x="{x0:.1f}" y="{y0-4}" width="3" height="{bh+8}" rx="1.5" fill="{CYAN}"/>')
     y = y0 + len(BANNER) * ch + 34
     b.append(f'<text class="fade bold" style="animation-delay:1.1s" x="{W/2}" y="{y}" text-anchor="middle">{esc(TAGLINE)}</text>')
     b.append(f'<text class="fade d" style="animation-delay:1.3s" x="{W/2}" y="{y+22}" text-anchor="middle">{esc(TAGS)}</text>')
     H = y + 62
     b.append(f'<text x="24" y="{H-16}"><tspan class="g bold">priyanshu@github</tspan><tspan class="d">:</tspan><tspan class="b">~</tspan><tspan class="d">$ </tspan><tspan class="cur g">█</tspan></text>')
-    svg = window(f"{USER}@github: ~", W, H, "\n".join(b))
+    sweep = tl - 3
+    css = (f".ld{{opacity:0;animation:ld {CYCLE}s linear infinite both}}"
+           f"@keyframes ld{{0%{{opacity:0}}3%{{opacity:1}}90%{{opacity:1}}94%{{opacity:0}}100%{{opacity:0}}}}"
+           f".scan{{opacity:0;filter:drop-shadow(0 0 4px {CYAN});animation:scan {CYCLE}s linear infinite both}}"
+           f"@keyframes scan{{0%{{transform:translateX(0);opacity:1}}9.5%{{transform:translateX({sweep:.0f}px);opacity:1}}10%{{transform:translateX({sweep:.0f}px);opacity:0}}100%{{opacity:0}}}}"
+           f"@media (prefers-reduced-motion:reduce){{.ld{{animation:none;opacity:1}}.scan{{display:none}}}}")
+    svg = window(f"{USER}@github: ~", W, H, "\n".join(b), css)
     defs = (f'<defs><linearGradient id="bg" gradientUnits="userSpaceOnUse" x1="{x0:.1f}" x2="{x0+tl:.1f}" y1="0" y2="0"><stop offset="0" stop-color="{GREEN}"/>'
             f'<stop offset="0.5" stop-color="{CYAN}"/><stop offset="1" stop-color="{MAGENTA}"/></linearGradient></defs>')
     return svg.replace("</style>", "</style>\n" + defs, 1)
