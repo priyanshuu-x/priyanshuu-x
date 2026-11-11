@@ -181,6 +181,7 @@ def main():
     (OUT / "terminal_about.svg").write_text(about_svg(), encoding="utf-8")
     (OUT / "social_linkedin.svg").write_text(pill_svg("linkedin", BLUE), encoding="utf-8")
     (OUT / "social_email.svg").write_text(pill_svg("email", AMBER), encoding="utf-8")
+    (OUT / "social_portfolio.svg").write_text(pill_svg("portfolio", GREEN), encoding="utf-8")
     (OUT / "terminal_skills.svg").write_text(skills_svg(), encoding="utf-8")
     print("ok")
 
